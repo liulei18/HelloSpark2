@@ -14,7 +14,14 @@ object WordCount {
 
     import spark.implicits._
     import org.apache.spark.sql.functions._
-    spark.read.text("c://words.txt").as[String].flatMap(value => value.split(" ")).groupBy($"value" as "word").agg(count("*") as "counts")
+    val result = spark.read.text("c://words.txt").as[String]
+      .flatMap(value => value.split(" "))
+      .groupBy($"value" as "word")
+      .agg(count("*") as "counts")
+      .orderBy($"counts" desc)
+
+
+    result.show()
     spark.stop()
   }
 }
